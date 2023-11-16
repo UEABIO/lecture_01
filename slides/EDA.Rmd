@@ -43,15 +43,9 @@ class: title-slide, left, top
 
 <span style='color:white;'>Slides released under</span> [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&nbsp;&nbsp;`r fontawesome::fa("creative-commons", "white")``r fontawesome::fa("creative-commons-by", "white")` ]   
 
-<span style='color:white;'>Slido.com #1018940</span>  
 
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
 
----
-
-layout: true
-
-<div class="my-footer"><span>Philip Leftwich - 5023Y - Slido.com #10189404</span></div>
 
 ---
 
@@ -79,10 +73,19 @@ class: center, middle
 
 ---
 
-class: center, middle,
+## Understand your data
 
-### Start exploring with visualizations that don’t hide or assume anything about the data.
+- Is each column in the appropriate data type? Factor, character, dbl, integer?
 
+- Are the columns and names easy to use/understand?
+
+- Basic data cleaning/ tidy data formatting
+
+---
+
+class: center, middle, inverse
+
+## Univariate analysis
 
 ---
 
@@ -240,6 +243,180 @@ ggplot(aes(x = body_mass_g,
 
 ---
 
+```{r, echo = FALSE, out.width = "80%"}
+penguins |> 
+    mutate(species=factor(species, levels=c("Adelie",
+                                            "Gentoo",
+                                            "Chinstrap"))) |> 
+    # set as factor and provide levels
+    ggplot()+
+    geom_bar(aes(x=species),
+             fill="steelblue",
+             width=0.8)+
+    labs(x="Species",
+         y = "Number of observations")+
+    coord_flip()+
+    theme_minimal()
+```
+
+---
+
+## Univariate analysis
+
+Continuous variables:
+
+Understand skew, outliers
+
+Factorial variables:
+
+Relative abundances, number of categories
+
+All: 
+
+Missing values
+
+---
+
+## QQplots
+
+```{r}
+x_values <- seq(2700,6300, 100)
+
+norm_mass <- dnorm(x_values,
+      mean = 4201.754,
+      sd = 801.9545) |> 
+  as_tibble()
+
+density <- tibble(x_values, norm_mass)
+
+penguins |> 
+ggplot()+
+  geom_histogram(aes(x=body_mass_g, y = ..density..),
+               alpha=0.8,
+               bins = 10,
+               fill="steelblue",
+               colour="darkgrey")+
+  geom_line(data = norm_mass, aes(x =x_values, y = value))+
+  labs(x = "Body mass (g)",
+       y = "Count")
+
+```
+
+---
+
+## QQplots
+
+.left-code[
+
+What is a qq plot?
+
+- "Q" stands for quantile, and a qqplot is a probability plot for comparing two distributions by plotting their quantiles against each other
+
+- quantile equals cutting the range of a probability distribution into equal chunks. e.g. 4 quantiles = quartiles
+
+]
+
+.right-plot[
+
+```{r, message = FALSE, echo = FALSE}
+penguins %>%  
+  pull(body_mass_g) %>% 
+  car::qqPlot()
+
+```
+
+]
+
+---
+
+## QQplot
+
+.left-code[
+
+
+- A qqplot compares the quantiles of a distribution against a theoretical distribution (usually the normal distribution). 
+
+- Can be used to see whether a dataset deviates from the normal distribution and in what way? Commonly used to determine whether statistical models fit the data well. 
+
+]
+
+.right-plot[
+
+```{r, message = FALSE, echo = FALSE}
+penguins %>% 
+  pull(body_mass_g) %>% 
+  car::qqPlot()
+
+```
+
+]
+
+---
+
+## QQplot
+
+.left-code[
+
+```{r, eval = T, echo = F}
+x_values <- seq(2700,6300, 100)
+
+norm_mass <- dnorm(x_values,
+      mean = 4201.754,
+      sd = 801.9545) |> 
+  as_tibble()
+
+density <- tibble(x_values, norm_mass)
+
+penguins |> 
+ggplot()+
+  geom_histogram(aes(x=body_mass_g, y = ..density..),
+               alpha=0.8,
+               bins = 10,
+               fill="steelblue",
+               colour="darkgrey")+
+  geom_line(data = norm_mass, aes(x =x_values, y = value))+
+  labs(x = "Body mass (g)",
+       y = "Count")
+
+```
+
+]
+
+.right-plot[
+
+```{r, message = FALSE, echo = FALSE}
+penguins %>% 
+  pull(body_mass_g) %>% 
+  car::qqPlot()
+
+```
+
+]
+
+---
+
+## Think about groupings
+
+Here - variable **is** normally distributed *within* populations
+
+```{r, echo = FALSE, out.width = "30%"}
+
+penguins |> 
+  group_split(species) |> 
+  walk(~ pull(.x, body_mass_g) 
+      |> car::qqPlot())
+
+```
+
+
+---
+
+class: center, middle, inverse
+
+## Multivariate analysis
+
+---
+
 ## Scatter plots
 
 Show relationships between two measured variables
@@ -321,56 +498,6 @@ knitr::include_graphics("images/plot_dotdist.gif")
 knitr::include_graphics("images/plot_boxplot.gif")
 ```
 
----
-
-## QQplots
-
-.left-code[
-
-What is a qq plot?
-
-- "Q" stands for quantile, and a qqplot is a probability plot for comparing two distributions by plotting their quantiles against each other
-
-- quantile equals cutting the range of a probability distribution into equal chunks. e.g. 4 quantiles = quartiles
-
-]
-
-.right-plot[
-
-```{r, message = FALSE, echo = FALSE}
-penguins %>% 
-  filter(species == "Adelie") %>% 
-  pull(body_mass_g) %>% 
-  car::qqPlot()
-
-```
-
-]
-
----
-
-## QQplot
-
-.left-code[
-
-
-- A qqplot compares the quantiles of a distribution against a theoretical distribution (usually the normal distribution). 
-
-- Can be used to see whether a dataset deviates from the normal distribution and in what way? Commonly used to determine whether statistical models fit the data well. 
-
-]
-
-.right-plot[
-
-```{r, message = FALSE, echo = FALSE}
-penguins %>% 
-  filter(species == "Adelie") %>% 
-  pull(body_mass_g) %>% 
-  car::qqPlot()
-
-```
-
-]
 
 ---
 
@@ -507,24 +634,23 @@ ggplot(penguins, aes(x = bill_length_mm,
 
 ---
 
-# Everything Everywhere All At Once
+# Pairs plots
 
 .left-code[
 
 ```{r, eval = FALSE}
 library(GGally)#<<
-penguins %>% 
-  ggpairs()
+penguins |> 
+  ggpairs(columns = 3:6, ggplot2::aes(colour = species))
 ```
 ]
 
 .right-plot[
 
 ```{r, echo = FALSE}
-library(GGally)
-penguins %>%
-  select(-c(island, year)) %>% 
-  ggpairs()
+library(GGally)#<<
+penguins |> 
+  ggpairs(columns = 3:6, ggplot2::aes(colour = species))
 ```
 
 ]
