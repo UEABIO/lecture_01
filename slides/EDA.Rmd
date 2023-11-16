@@ -83,6 +83,19 @@ class: center, middle
 
 ---
 
+### Understand data
+
+Understand missingness 
+
+```{r}
+penguins %>%                                    # Count NA by group
+  group_by(species) %>%
+  dplyr::summarize(count_na = sum(is.na(sex)))
+
+```
+
+---
+
 class: center, middle, inverse
 
 ## Univariate analysis
@@ -279,7 +292,7 @@ Missing values
 
 ## QQplots
 
-```{r}
+```{r, echo = F}
 x_values <- seq(2700,6300, 100)
 
 norm_mass <- dnorm(x_values,
