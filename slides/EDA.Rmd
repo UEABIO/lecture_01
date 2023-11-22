@@ -292,7 +292,7 @@ Missing values
 
 ## QQplots
 
-```{r, echo = F}
+```{r, echo = F, out.width = "80%"}
 x_values <- seq(2700,6300, 100)
 
 norm_mass <- dnorm(x_values,

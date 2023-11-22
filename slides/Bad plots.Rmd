@@ -43,24 +43,97 @@ class: title-slide, left, top
 
 <span style='color:white;'>Slides released under</span> [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&nbsp;&nbsp;`r fontawesome::fa("creative-commons", "white")``r fontawesome::fa("creative-commons-by", "white")` ]   
 
-<span style='color:white;'>Slido.com #3348877</span>  
 
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
 
 ---
 
-layout: true
+# Hello! 👋
 
-<div class="my-footer"><span>Philip Leftwich - 5023Y - Slido.com #3348877</span></div>
 
 ---
 
-# Hello! 👋
+class: center, middle, inverse
 
-.pull-left[
+# Assignment advice
 
 
-- Let me know how you are today in the Q&A on today's Slido!
+---
+
+# Have a well organised project
+
+- Use independent R scripts to work on each figure
+
+- Communicate clearly on when to combine into your final report
+
+- Organise regular meetings with action points
+
+---
+
+
+# Organising RMarkdown
+
+````r
+`r ''````{r include = F}
+source("scripts/data_scientist_1.R")
+
+```
+````
+
+````r
+`r ''````{r echo = F, fig.asp = 0.8, fig.width = 7}
+plot_01
+
+```
+````
+
+````r
+`r ''````{r include = F}
+source("scripts/data_scientist_2.R")
+
+```
+````
+
+````r
+`r ''````{r echo = F, fig.asp = 0.8, fig.width = 7}
+plot_02
+
+```
+````
+
+---
+
+# Git hygiene
+
+- Pull at the start of a session
+
+- Pull before pushing
+
+Before you try to push code out to the repository, you should always pull
+If you push before syncing up, you could end up with multiple heads or merge conflicts when you push.
+
+- Make frequent commits and write sensible messages
+
+- Push what works! 
+
+---
+
+
+
+
+# Tips
+
+- Do not work on the same file at the same time (e.g. RMarkdown)
+
+- Have you installed any new packages? Could cause knit failures if someone else doesn't have them! 
+
+- Communicate! Push and Pull frequently
+
+- Make sure your scripts and projects are tidy (not loads of unnecessary code/redundant files)
+
+- Indicate when submitting if you wish to be marked independently
+
+
 
 
 ---
