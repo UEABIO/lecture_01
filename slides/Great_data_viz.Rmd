@@ -43,15 +43,8 @@ class: title-slide, left, top
 
 <span style='color:white;'>Slides released under</span> [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&nbsp;&nbsp;`r fontawesome::fa("creative-commons", "white")``r fontawesome::fa("creative-commons-by", "white")` ]   
 
-<span style='color:white;'>Slido.com #2681001</span>  
 
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
-
----
-
-layout: true
-
-<div class="my-footer"><span>Philip Leftwich - 5023Y - Slido.com #2681001</span></div>
 
 
 ---
@@ -464,6 +457,7 @@ mpg_sum <- mpg_sum %>%
 
 ]
 ---
+
 class: center, middle
 
 # Line graphs
@@ -590,61 +584,509 @@ economics %>%
 ```
 
 ]
----
-
-class: center, middle, inverse
-
-# Final assignment advice
-
 
 ---
 
-# Organising RMarkdown
+```{r, include = FALSE}
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(ggtext)
+library(ggrepel)
 
-````r
-`r ''````{r include = F}
-source("scripts/data_scientist_1.R")
+library(gghighlight)
+
+infant_mortality <- read_csv("../data/infant_mortality.csv") 
+```
+
+.left-code[
+
+```{r, eval = T}
+subset_infant_mortality <- infant_mortality %>%
+  pivot_longer(cols="1960":"2020", 
+               names_to="year",               
+               values_to="infant_mortality_rate") %>%
+  mutate(year=lubridate::years(year)) %>% # set ymd format
+  mutate(year=lubridate::year(year)) %>% # extract year
+  janitor::clean_names() %>% # put names in snake case
+  filter(country_name %in% 
+           c("United States", 
+             "Japan", 
+             "Afghanistan", 
+             "United Kingdom")) # extract four countries
+
 
 ```
-````
 
-````r
-`r ''````{r echo = F, fig.asp = 0.8, fig.width = 7}
-plot_01
+]
+
+.right-plot[
+
+```{r, echo = F}
+
+
+subset_infant_mortality
+
+# subset the date according to (US,UK, Japan = lowest infant death rates, Afghanistan = highest infant death rates)
+```
+
+]
+
+---
+.left-code[
+
+
+```{r, eval = F}
+ggplot(data = subset_infant_mortality,
+                           aes(x = year,
+                 y = infant_mortality_rate,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = subset_infant_mortality %>% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle("Mortality rate, infant (per 1,000 live births) \nhas been steadily falling in Afghanistan from 1970 to present")
+
 
 ```
-````
 
-````r
-`r ''````{r include = F}
-source("scripts/data_scientist_2.R")
+]
+
+.right-plot[
+
+```{r, echo =F}
+ggplot(data = subset_infant_mortality,
+                           aes(x = year,
+                 y = infant_mortality_rate,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = subset_infant_mortality %>% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none",
+        plot.title = element_markdown())+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle('Mortality rate, infant (per 1,000 live births) <br> has been steadily falling in  <span style = "color:#000000">Afghanistan</span> from 1970 to present')
+
 
 ```
-````
 
-````r
-`r ''````{r echo = F, fig.asp = 0.8, fig.width = 7}
-plot_02
 
-```
-````
+]
 
 ---
 
-# Tips
+.left-code[
 
-- Do not work on the same file at the same time (e.g. RMarkdown)
 
-- Have you installed any new packages? Could cause knit failures if someone else doesn't have them! 
+```{r, eval = F}
 
-- Communicate! Push and Pull frequently
+prop_change_infant_mortality <- subset_infant_mortality %>% 
+  group_by(country_name) %>% 
+  mutate(prop = (((infant_mortality_rate/lag(infant_mortality_rate, order_by = year))-1)*100)) %>% 
+  drop_na(prop) %>% 
+  mutate(cum_prop = cumsum(prop))
+  
 
-- Make sure your scripts and projects are tidy (not loads of unnecessary code/redundant files)
+```
 
-- Indicate when submitting if you wish to be marked independently
+]
+
+.right-plot[
+
+
+```{r, echo = F}
+
+prop_change_infant_mortality <- subset_infant_mortality %>% 
+  group_by(country_name) %>% 
+  mutate(prop = (((infant_mortality_rate/lag(infant_mortality_rate, order_by = year))-1)*100)) %>% 
+  drop_na(prop) %>% 
+  mutate(cum_prop = cumsum(prop))
+  
+prop_change_infant_mortality
+```
+
+]
 
 ---
 
-# Mid-module review
+.left-code[
 
-[https://forms.gle/SHBz4NL4mfUSQEsm6]
+```{r, eval = F}
+plot <- ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = prop_change_infant_mortality %>% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            segment.color = 'transparent',
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle("Year over year percent change in infant mortality")
+
+plot
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+plot <- ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = prop_change_infant_mortality %>% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            segment.color = 'transparent',
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle("Year over year percent change in infant mortality")
+
+plot
+```
+
+]
+
+---
+
+.left-code[
+
+```{r, eval = F}
+
+plot +
+  gghighlight(country_name  == "Afghanistan", 
+              use_direct_label = FALSE
+              )
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+
+plot +
+  gghighlight(country_name  == "Afghanistan", 
+              use_direct_label = FALSE
+              )
+
+```
+
+]
+
+---
+
+.left-code[
+
+
+```{r, eval = F}
+
+ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name,
+                 fill = country_name)) +
+  geom_ribbon(aes(ymax = 0, ymin = cum_prop), alpha = .2)+
+  geom_line() +
+  geom_hline(aes(yintercept = 0), colour = "black") +
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))+
+  scale_fill_manual(values = c("black", "blue", "magenta", "orange"))+
+  gghighlight( use_direct_label = F,
+      unhighlighted_params = list(color = "grey70", size = .5)) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2020)+
+  facet_wrap(~ country_name)+
+  scale_y_continuous(labels = scales::label_percent(scale =1))+
+  geom_text(data = prop_change_infant_mortality %>% filter(year == 2019), aes(label = paste(round(cum_prop),"%"), colour = country_name), nudge_x = 7)+
+  theme(panel.grid.major.x = element_blank(),
+        panel.spacing = unit(2, "lines"),
+        strip.text = element_text(size = 13, face = "bold"),
+        plot.title = element_text(size = 14, hjust = .5, margin = margin(b = 10)))+
+  labs(y = "Percentage change in infant mortality",
+       x = "Year",
+       title = "Infant death rates have fallen consistently for the past 40 years")+
+  xlim(1970, 2030) 
+
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+
+ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name,
+                 fill = country_name)) +
+  geom_ribbon(aes(ymax = 0, ymin = cum_prop), alpha = .2)+
+  geom_line() +
+  geom_hline(aes(yintercept = 0), colour = "black") +
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))+
+  scale_fill_manual(values = c("black", "blue", "magenta", "orange"))+
+  gghighlight( use_direct_label = F,
+      unhighlighted_params = list(color = "grey70", size = .5)) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2020)+
+  facet_wrap(~ country_name)+
+  scale_y_continuous(labels = scales::label_percent(scale =1))+
+  geom_text(data = prop_change_infant_mortality %>% filter(year == 2019), aes(label = paste(round(cum_prop),"%"), colour = country_name), nudge_x = 7)+
+  theme(panel.grid.major.x = element_blank(),
+        panel.spacing = unit(2, "lines"),
+        strip.text = element_text(size = 13, face = "bold"),
+        plot.title = element_text(size = 14, hjust = .5, margin = margin(b = 10)))+
+  labs(y = "Percentage change in infant mortality",
+       x = "Year",
+        title = "Infant death rates have fallen consistently for the past 40 years")+
+  xlim(1970, 2030) 
+
+
+```
+
+]
+---
+
+.left-code[
+
+```{r, eval = F}
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(x = species,
+             y = body_mass_g,
+             colour = sex))+
+  geom_point(position = position_jitterdodge()) +
+  coord_flip()
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(x = species,
+             y = body_mass_g,
+             colour = sex))+
+  geom_point(position = position_jitterdodge()) +
+  coord_flip()
+```
+
+]
+
+---
+
+.left-code[
+
+```{r, eval = F}
+library(ggridges)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  geom_density_ridges()
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+library(ggridges)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  geom_density_ridges()
+
+```
+
+
+]
+
+
+---
+
+
+.left-code[
+
+```{r, eval = F}
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()
+
+```
+
+]
+
+
+.right-plot[
+
+```{r, echo = F}
+
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()
+
+```
+
+]
+
+---
+
+.left-code[
+
+```{r, eval = F}
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()+
+  gghighlight( body_mass_g > 4500)
+
+
+```
+
+]
+
+.right-plot[
+
+
+```{r, echo = F}
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()+
+  gghighlight( body_mass_g > 4680)
+
+
+```
+
+]
+
+---
+
+.left-code[
+
+```{r, eval = F}
+
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = sex,
+             x = body_mass_g,
+             fill = sex))+
+    geom_rect(xmin = 4680, xmax = Inf, 
+            ymin = -Inf, ymax = Inf,
+            fill = "grey92") +
+  stat_halfeye(aes(fill = stat(abs(x) > 4680)),
+               shape = 21,
+               .width = c(.025, .975))+
+  facet_wrap(~fct_rev(species), ncol = 1) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.line.x = element_line(color = "grey40"))+
+    ## change color palette and name
+  scale_fill_manual(values = c( "#0fb78e", "#b3b3b3"), guide = "none") 
+
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = F}
+
+library(ggdist)
+
+penguins %>% 
+  drop_na(sex) %>% 
+  ggplot(aes(y = sex,
+             x = body_mass_g,
+             fill = sex))+
+    geom_rect(xmin = 4680, xmax = Inf, 
+            ymin = -Inf, ymax = Inf,
+            fill = "grey92") +
+  stat_halfeye(aes(fill = stat(abs(x) > 4680)),
+               shape = 21,
+               .width = c(.025, .975))+
+  facet_wrap(~fct_rev(species), ncol = 1) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.line.x = element_line(color = "grey40"),
+        plot.title = element_markdown(face = "bold", size = 16))+
+    ## change color palette and name
+  scale_fill_manual(values = c( "#0fb78e", "#b3b3b3"), guide = "none") +
+  labs(title = paste('While male penguins are on average larger than females,<br> <span style = "color:#0fb78e"> the average female Gentoo is larger<br> than males from other species </span>'),
+       x = "Body mass (g)",
+       y = "")
+
+
+```
+
+]

@@ -4,7 +4,7 @@
     <title>ABC of data visuals</title>
     <meta charset="utf-8" />
     <meta name="author" content="Philip Leftwich" />
-    <meta name="date" content="2022-12-12" />
+    <meta name="date" content="2023-11-30" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
@@ -31,15 +31,8 @@ class: title-slide, left, top
 
 &lt;span style='color:white;'&gt;Slides released under&lt;/span&gt; [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&amp;nbsp;&amp;nbsp;<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M245.83 214.87l-33.22 17.28c-9.43-19.58-25.24-19.93-27.46-19.93-22.13 0-33.22 14.61-33.22 43.84 0 23.57 9.21 43.84 33.22 43.84 14.47 0 24.65-7.09 30.57-21.26l30.55 15.5c-6.17 11.51-25.69 38.98-65.1 38.98-22.6 0-73.96-10.32-73.96-77.05 0-58.69 43-77.06 72.63-77.06 30.72-.01 52.7 11.95 65.99 35.86zm143.05 0l-32.78 17.28c-9.5-19.77-25.72-19.93-27.9-19.93-22.14 0-33.22 14.61-33.22 43.84 0 23.55 9.23 43.84 33.22 43.84 14.45 0 24.65-7.09 30.54-21.26l31 15.5c-2.1 3.75-21.39 38.98-65.09 38.98-22.69 0-73.96-9.87-73.96-77.05 0-58.67 42.97-77.06 72.63-77.06 30.71-.01 52.58 11.95 65.56 35.86zM247.56 8.05C104.74 8.05 0 123.11 0 256.05c0 138.49 113.6 248 247.56 248 129.93 0 248.44-100.87 248.44-248 0-137.87-106.62-248-248.44-248zm.87 450.81c-112.54 0-203.7-93.04-203.7-202.81 0-105.42 85.43-203.27 203.72-203.27 112.53 0 202.82 89.46 202.82 203.26-.01 121.69-99.68 202.82-202.84 202.82z"/></svg><svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M314.9 194.4v101.4h-28.3v120.5h-77.1V295.9h-28.3V194.4c0-4.4 1.6-8.2 4.6-11.3 3.1-3.1 6.9-4.7 11.3-4.7H299c4.1 0 7.8 1.6 11.1 4.7 3.1 3.2 4.8 6.9 4.8 11.3zm-101.5-63.7c0-23.3 11.5-35 34.5-35s34.5 11.7 34.5 35c0 23-11.5 34.5-34.5 34.5s-34.5-11.5-34.5-34.5zM247.6 8C389.4 8 496 118.1 496 256c0 147.1-118.5 248-248.4 248C113.6 504 0 394.5 0 256 0 123.1 104.7 8 247.6 8zm.8 44.7C130.2 52.7 44.7 150.6 44.7 256c0 109.8 91.2 202.8 203.7 202.8 103.2 0 202.8-81.1 202.8-202.8.1-113.8-90.2-203.3-202.8-203.3z"/></svg> ]   
 
-&lt;span style='color:white;'&gt;Slido.com #2681001&lt;/span&gt;  
 
 &lt;div style = "position: absolute;top: 0px;right: 0px;"&gt;&lt;img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"&gt;&lt;/img&gt;&lt;/div&gt;
-
----
-
-layout: true
-
-&lt;div class="my-footer"&gt;&lt;span&gt;Philip Leftwich - 5023Y - Slido.com #2681001&lt;/span&gt;&lt;/div&gt;
 
 
 ---
@@ -57,15 +50,15 @@ head(mpg)
 ```
 
 ```
-## # A tibble: 6 x 11
+## # A tibble: 6 × 11
 ##   manufacturer model displ  year   cyl trans      drv     cty   hwy fl    class 
 ##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 audi         a4      1.8  1999     4 auto(l5)   f        18    29 p     compa~
-## 2 audi         a4      1.8  1999     4 manual(m5) f        21    29 p     compa~
-## 3 audi         a4      2    2008     4 manual(m6) f        20    31 p     compa~
-## 4 audi         a4      2    2008     4 auto(av)   f        21    30 p     compa~
-## 5 audi         a4      2.8  1999     6 auto(l5)   f        16    26 p     compa~
-## 6 audi         a4      2.8  1999     6 manual(m5) f        18    26 p     compa~
+## 1 audi         a4      1.8  1999     4 auto(l5)   f        18    29 p     compa…
+## 2 audi         a4      1.8  1999     4 manual(m5) f        21    29 p     compa…
+## 3 audi         a4      2    2008     4 manual(m6) f        20    31 p     compa…
+## 4 audi         a4      2    2008     4 auto(av)   f        21    30 p     compa…
+## 5 audi         a4      2.8  1999     6 auto(l5)   f        16    26 p     compa…
+## 6 audi         a4      2.8  1999     6 manual(m5) f        18    26 p     compa…
 ```
 
 ---
@@ -79,7 +72,7 @@ mpg %&gt;%
 ```
 
 ```
-## # A tibble: 15 x 2
+## # A tibble: 15 × 2
 ##    manufacturer     n
 ##    &lt;chr&gt;        &lt;int&gt;
 ##  1 audi             9
@@ -223,17 +216,17 @@ mpg_sum
 ```
 
 ```
-## # A tibble: 11 x 3
+## # A tibble: 11 × 3
 ##    manufacturer     n   prob
 ##    &lt;fct&gt;        &lt;int&gt;  &lt;dbl&gt;
-##  1 Audi             9 0.0769
-##  2 Chevrolet       12 0.103 
-##  3 Dodge           21 0.179 
-##  4 Ford            10 0.0855
-##  5 Hyundai          8 0.0684
-##  6 Jeep             6 0.0513
-##  7 Nissan           7 0.0598
-##  8 Other           11 0.0940
+##  1 Other           11 0.0940
+##  2 Audi             9 0.0769
+##  3 Chevrolet       12 0.103 
+##  4 Dodge           21 0.179 
+##  5 Ford            10 0.0855
+##  6 Hyundai          8 0.0684
+##  7 Jeep             6 0.0513
+##  8 Nissan           7 0.0598
 ##  9 Subaru           8 0.0684
 ## 10 Toyota          14 0.120 
 ## 11 Volkswagen      11 0.0940
@@ -442,6 +435,7 @@ mpg_sum %&gt;%
 
 ]
 ---
+
 class: center, middle
 
 # Line graphs
@@ -457,7 +451,7 @@ head(economics)
 ```
 
 ```
-## # A tibble: 6 x 6
+## # A tibble: 6 × 6
 ##   date         pce    pop psavert uempmed unemploy
 ##   &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 1967-07-01  507. 198712    12.6     4.5     2944
@@ -477,7 +471,7 @@ economics
 ```
 
 ```
-## # A tibble: 574 x 6
+## # A tibble: 574 × 6
 ##    date         pce    pop psavert uempmed unemploy
 ##    &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
 ##  1 1967-07-01  507. 198712    12.6     4.5     2944
@@ -490,7 +484,7 @@ economics
 ##  8 1968-02-01  534. 199920    12.3     4.5     3001
 ##  9 1968-03-01  544. 200056    11.7     4.1     2877
 ## 10 1968-04-01  544  200208    12.3     4.6     2709
-## # ... with 564 more rows
+## # ℹ 564 more rows
 ```
 
 ---
@@ -553,64 +547,364 @@ economics %&gt;%
 &lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-31-1.png" width="120%" /&gt;
 
 ]
----
-
-class: center, middle, inverse
-
-# Final assignment advice
-
 
 ---
 
-# Organising RMarkdown
 
-````r
-```{r include = F}
-source("scripts/data_scientist_1.R")
+
+.left-code[
+
+
+```r
+subset_infant_mortality &lt;- infant_mortality %&gt;%
+  pivot_longer(cols="1960":"2020", 
+               names_to="year",               
+               values_to="infant_mortality_rate") %&gt;%
+  mutate(year=lubridate::years(year)) %&gt;% # set ymd format
+  mutate(year=lubridate::year(year)) %&gt;% # extract year
+  janitor::clean_names() %&gt;% # put names in snake case
+  filter(country_name %in% 
+           c("United States", 
+             "Japan", 
+             "Afghanistan", 
+             "United Kingdom")) # extract four countries
+```
+
+]
+
+.right-plot[
+
 
 ```
-````
-
-````r
-```{r echo = F, fig.asp = 0.8, fig.width = 7}
-plot_01
-
+## # A tibble: 244 × 6
+##    country_name country_code indicator_name                 indicator_code  year
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;                          &lt;chr&gt;          &lt;dbl&gt;
+##  1 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1960
+##  2 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1961
+##  3 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1962
+##  4 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1963
+##  5 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1964
+##  6 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1965
+##  7 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1966
+##  8 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1967
+##  9 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1968
+## 10 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1969
+## # ℹ 234 more rows
+## # ℹ 1 more variable: infant_mortality_rate &lt;dbl&gt;
 ```
-````
 
-````r
-```{r include = F}
-source("scripts/data_scientist_2.R")
+]
 
+---
+.left-code[
+
+
+
+```r
+ggplot(data = subset_infant_mortality,
+                           aes(x = year,
+                 y = infant_mortality_rate,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = subset_infant_mortality %&gt;% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle("Mortality rate, infant (per 1,000 live births) \nhas been steadily falling in Afghanistan from 1970 to present")
 ```
-````
 
-````r
-```{r echo = F, fig.asp = 0.8, fig.width = 7}
-plot_02
+]
 
-```
-````
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-36-1.png" width="120%" /&gt;
+
+
+]
 
 ---
 
-# Tips
+.left-code[
 
-- Do not work on the same file at the same time (e.g. RMarkdown)
 
-- Have you installed any new packages? Could cause knit failures if someone else doesn't have them! 
 
-- Communicate! Push and Pull frequently
+```r
+prop_change_infant_mortality &lt;- subset_infant_mortality %&gt;% 
+  group_by(country_name) %&gt;% 
+  mutate(prop = (((infant_mortality_rate/lag(infant_mortality_rate, order_by = year))-1)*100)) %&gt;% 
+  drop_na(prop) %&gt;% 
+  mutate(cum_prop = cumsum(prop))
+```
 
-- Make sure your scripts and projects are tidy (not loads of unnecessary code/redundant files)
+]
 
-- Indicate when submitting if you wish to be marked independently
+.right-plot[
+
+
+
+```
+## # A tibble: 234 × 8
+## # Groups:   country_name [4]
+##    country_name country_code indicator_name                 indicator_code  year
+##    &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;                          &lt;chr&gt;          &lt;dbl&gt;
+##  1 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1963
+##  2 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1964
+##  3 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1965
+##  4 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1966
+##  5 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1967
+##  6 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1968
+##  7 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1969
+##  8 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1970
+##  9 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1971
+## 10 Afghanistan  AFG          Mortality rate, infant (per 1… SP.DYN.IMRT.IN  1972
+## # ℹ 224 more rows
+## # ℹ 3 more variables: infant_mortality_rate &lt;dbl&gt;, prop &lt;dbl&gt;, cum_prop &lt;dbl&gt;
+```
+
+]
 
 ---
 
-# Mid-module review
+.left-code[
 
-[https://forms.gle/SHBz4NL4mfUSQEsm6]
+
+```r
+plot &lt;- ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name)) +
+  geom_line() +
+  geom_text_repel(data = prop_change_infant_mortality %&gt;% filter(year == 2019), aes(label = country_name, colour = country_name),
+            fill = "white",
+            nudge_x = 5,
+            segment.color = 'transparent',
+            fontface = "bold")+
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))  +
+  geom_vline(xintercept = 2000,
+             lty = 2) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2030)+
+  labs(x="Year",
+       y="Deaths per 100,000")+
+  ggtitle("Year over year percent change in infant mortality")
+
+plot
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-40-1.png" width="120%" /&gt;
+
+]
+
+---
+
+.left-code[
+
+
+```r
+plot +
+  gghighlight(country_name  == "Afghanistan", 
+              use_direct_label = FALSE
+              )
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-42-1.png" width="120%" /&gt;
+
+]
+
+---
+
+.left-code[
+
+
+
+```r
+ggplot(data = prop_change_infant_mortality,
+                           aes(x = year,
+                 y = cum_prop,
+                 color = country_name,
+                 fill = country_name)) +
+  geom_ribbon(aes(ymax = 0, ymin = cum_prop), alpha = .2)+
+  geom_line() +
+  geom_hline(aes(yintercept = 0), colour = "black") +
+  scale_color_manual(values = c("black", "blue", "magenta", "orange"))+
+  scale_fill_manual(values = c("black", "blue", "magenta", "orange"))+
+  gghighlight( use_direct_label = F,
+      unhighlighted_params = list(color = "grey70", size = .5)) +
+  theme_minimal()+
+  theme(legend.position="none")+
+  xlim(1970, 2020)+
+  facet_wrap(~ country_name)+
+  scale_y_continuous(labels = scales::label_percent(scale =1))+
+  geom_text(data = prop_change_infant_mortality %&gt;% filter(year == 2019), aes(label = paste(round(cum_prop),"%"), colour = country_name), nudge_x = 7)+
+  theme(panel.grid.major.x = element_blank(),
+        panel.spacing = unit(2, "lines"),
+        strip.text = element_text(size = 13, face = "bold"),
+        plot.title = element_text(size = 14, hjust = .5, margin = margin(b = 10)))+
+  labs(y = "Percentage change in infant mortality",
+       x = "Year",
+       title = "Infant death rates have fallen consistently for the past 40 years")+
+  xlim(1970, 2030) 
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-44-1.png" width="120%" /&gt;
+
+]
+---
+
+.left-code[
+
+
+```r
+penguins %&gt;% 
+  drop_na(sex) %&gt;% 
+  ggplot(aes(x = species,
+             y = body_mass_g,
+             colour = sex))+
+  geom_point(position = position_jitterdodge()) +
+  coord_flip()
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-46-1.png" width="120%" /&gt;
+
+]
+
+---
+
+.left-code[
+
+
+```r
+library(ggridges)
+
+penguins %&gt;% 
+  drop_na(sex) %&gt;% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  geom_density_ridges()
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-48-1.png" width="120%" /&gt;
+
+
+]
+
+
+---
+
+
+.left-code[
+
+
+```r
+library(ggdist)
+
+penguins %&gt;% 
+  drop_na(sex) %&gt;% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()
+```
+
+]
+
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-50-1.png" width="120%" /&gt;
+
+]
+
+---
+
+.left-code[
+
+
+```r
+library(ggdist)
+
+penguins %&gt;% 
+  drop_na(sex) %&gt;% 
+  ggplot(aes(y = species,
+             x = body_mass_g,
+             fill = sex))+
+  stat_halfeye()+
+  gghighlight( body_mass_g &gt; 4500)
+```
+
+]
+
+.right-plot[
+
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-52-1.png" width="120%" /&gt;
+
+]
+
+---
+
+.left-code[
+
+
+```r
+library(ggdist)
+
+penguins %&gt;% 
+  drop_na(sex) %&gt;% 
+  ggplot(aes(y = sex,
+             x = body_mass_g,
+             fill = sex))+
+    geom_rect(xmin = 4680, xmax = Inf, 
+            ymin = -Inf, ymax = Inf,
+            fill = "grey92") +
+  stat_halfeye(aes(fill = stat(abs(x) &gt; 4680)),
+               shape = 21,
+               .width = c(.025, .975))+
+  facet_wrap(~fct_rev(species), ncol = 1) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.line.x = element_line(color = "grey40"))+
+    ## change color palette and name
+  scale_fill_manual(values = c( "#0fb78e", "#b3b3b3"), guide = "none") 
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Great_data_viz_files/figure-html/unnamed-chunk-54-1.png" width="120%" /&gt;
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -659,6 +953,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
