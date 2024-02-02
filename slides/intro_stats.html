@@ -4,7 +4,7 @@
     <title>Intro to stats</title>
     <meta charset="utf-8" />
     <meta name="author" content="Philip Leftwich" />
-    <meta name="date" content="2023-01-30" />
+    <meta name="date" content="2024-02-02" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="libs/htmlwidgets/htmlwidgets.js"></script>
@@ -38,12 +38,6 @@ class: title-slide, left, top
 
 &lt;div style = "position: absolute;top: 0px;right: 0px;"&gt;&lt;img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"&gt;&lt;/img&gt;&lt;/div&gt;
 
----
-
-layout: true
-
-&lt;div class="my-footer"&gt;&lt;span&gt;Philip Leftwich - 5023Y Courses Slido.com #3163611&lt;/span&gt;&lt;/div&gt;
-
 
 
 ---
@@ -51,7 +45,7 @@ class: center, middle
 
 ## The Golem of Prague
 
-&lt;img src="images/golem.png" title="Rabbi Judah Loew of Prague with his creation the Golem" alt="Rabbi Judah Loew of Prague with his creation the Golem" width="70%" /&gt;
+&lt;img src="images/golem.png" alt="Rabbi Judah Loew of Prague with his creation the Golem" width="70%" /&gt;
 
 *People feared giving the power of life to this golem. These proved founded when the power granted upon the golem led it to take innocent lives while blindly following its creator’s instructions*
 
@@ -67,7 +61,11 @@ class: center, middle, inverse
 
 *Statistical models are similar to golems in that, beyond their given directives, they do not ascertain any knowledge or intent of their own.*
 
+--
+
 *They hold no wisdom or power to understand the context of where they are being applied, and whether their resulting output is appropriate for the given situation.* 
+
+--
 
 *They are just a set of instructions made to analyze data to challenge beliefs, inspire intuition, or validate hypotheses*
 
@@ -106,7 +104,7 @@ Now with any model we have to know how well it fits/ how accurate it is
 .right-plot[
 
 
-&lt;img src="images/bridge.png" title=" Model bridges" alt=" Model bridges" width="120%" /&gt;
+&lt;img src="images/bridge.png" alt=" Model bridges" width="120%" /&gt;
 
 ]
 
@@ -130,7 +128,7 @@ Phil has **1** friend
 
 The model assumes each lecturer has **2.6** friends
 
-The deviance is **-1.6** friend
+The deviance is **-1.6** friends
 
 Model **overestimates** number of friends for this lecturer 😔
 
@@ -165,6 +163,8 @@ class: center
 Small `\(s\)` = taller, narrower
 Large `\(s\)` = squatter, wider
 
+`\(f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`
+
 
 ```r
 rnorm(n = 1000,mean = 0,sd = 1)
@@ -172,10 +172,63 @@ rnorm(n = 1000,mean = 0,sd = 2)
 rnorm(n = 1000,mean = 0,sd = 3)
 ```
 
-&lt;img src="intro_stats_files/figure-html/unnamed-chunk-4-1.png" width="60%" /&gt;
+&lt;img src="intro_stats_files/figure-html/unnamed-chunk-4-1.png" width="50%" /&gt;
+
+
+---
+class: center
+
+.pull-left[
+
+`\(f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`
+
+Where:
+
+`\(f(x)\)` = probability of x function
+
+`\(\mu\)` = mean
+
+`\(\sigma\)` = standard deviation
+
+`\(e\)` = 2.71828...
+
+`\(pi\)` 3.14159...
+
+]
+
+.pull-right[
+
+
+&lt;img src="intro_stats_files/figure-html/unnamed-chunk-5-1.png" width="50%" /&gt;
+
+]
 
 ---
 
+## Normal Distribution
+
+--
+
+.pull-left[
+
+&lt;img src="images/probability curve.png" alt=" Normal distribution" width="40%" /&gt;
+
+]
+
+.pull-right[
+
+
+`\(Z = \frac{X - \bar{X}}{\sigma}\)`
+
+Where:
+- `\(Z\)` is the z score.
+- `\(X\)` is the individual data point.
+- `\(\bar{X}\)` is the mean of the data.
+- `\(\sigma\)` is the standard deviation.
+
+]
+
+---
 
 ## Responsible statistics
 
@@ -232,27 +285,24 @@ class: center, middle, inverse
 
 Each time we take a sample, they will vary slightly
 
-.right-plot[
 
-<div id="htmlwidget-8d976c12873680a35165" style="width:95%;height:403.2px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-8d976c12873680a35165">{"x":{"diagram":"digraph {\n  \ngraph[layout = dot]\n\na[label = \"Population mean = 3\"]\nb[label = \"Sample mean = 3\"]\nc[label = \"Sample mean = 4\"]\nd[label = \"Sample mean = 5\"]\ne[label = \"Sample mean = 1\"]\nf[label = \"Sample mean = 2\"]\ng[label = \"Sample mean = 4\"]\n\na -> b\na -> c\na -> d\na -> e\na -> f\na -> g\n\n\n\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6d34e3b196905a3f0972" style="width:105%;height:403.2px;"></div>
+<script type="application/json" data-for="htmlwidget-6d34e3b196905a3f0972">{"x":{"diagram":"digraph {\n  \ngraph[layout = dot]\n\na[label = \"Population mean = 3\"]\nb[label = \"Sample mean = 3\"]\nc[label = \"Sample mean = 4\"]\nd[label = \"Sample mean = 5\"]\ne[label = \"Sample mean = 1\"]\nf[label = \"Sample mean = 2\"]\ng[label = \"Sample mean = 4\"]\n\na -> b\na -> c\na -> d\na -> e\na -> f\na -> g\n\n\n\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
-]
+---
 
-.left-code[
-
+## Standard Error
 
 - Going *back* to standard deviation, small standard deviations showed data points were close to the mean, large standard deviations the points were further away
 
-
+--
 
 - If you were able to calculate the deviation between *sample means* you would know how much variability there is between samples
 
-
+--
 
 - The standard deviation of sample means is called the **standard error**
 
-]
 
 ---
 
@@ -262,11 +312,12 @@ Each time we take a sample, they will vary slightly
 
 - We rely on approximation
 
-- When samples are sufficiently large ( &gt; 30), the sampling distribution should have a mean equal to the population mean within a standard deviation of the equation below: 
+- When samples are sufficiently large ( &gt; 30), the sampling distribution *should* have a mean equal to the population mean within a standard deviation of the equation below: 
 
 $$
 SE = {\sigma\over{\sqrt{n}}}
 $$
+
 This is the **central limit theorem**
 
 ---
@@ -299,7 +350,7 @@ The mean either *is* or *is not* within this range
 
 Frame the probability around the intervals not the population parameter.
 
-&lt;img src="images/CI-experiments.png" title=" Confidence Intervals" alt=" Confidence Intervals" width="60%" /&gt;
+&lt;img src="images/CI-experiments.png" alt=" Confidence Intervals" width="60%" /&gt;
 
 ---
 
@@ -365,6 +416,7 @@ Three choices:
 2. Use another type of sampling distribution (e.g. t-distribution)
 
 --
+
 3. Bootstrap our sampling distribution
 
 
@@ -372,7 +424,31 @@ Three choices:
 
 ## Bootstrapping
 
-&lt;img src="images/bootstrapping.png" title="With as few as 10 data points in our random sample, it is possible to do  bootstapped resampling (minimum ~ 1000 samples). We can use this to find the sampling distribution of the mean, se and 95% CI " alt="With as few as 10 data points in our random sample, it is possible to do  bootstapped resampling (minimum ~ 1000 samples). We can use this to find the sampling distribution of the mean, se and 95% CI " width="120%" /&gt;
+&lt;img src="images/bootstrapping.png" alt="With as few as 10 data points in our random sample, it is possible to do  bootstapped resampling (minimum ~ 1000 samples). We can use this to find the sampling distribution of the mean, se and 95% CI " width="120%" /&gt;
+
+---
+
+## Confidence interval from z
+
+
+```r
+  penguins %&gt;% 
+  filter(sex == "male") %&gt;% 
+  summarise(mean = mean(flipper_length_mm),
+            sd = sd(flipper_length_mm),
+            n = n(),
+            se = sd/sqrt(n),
+            lower_ci = (mean - (1.96*se)),
+            upper_ci = (mean + (1.96*se)))
+```
+
+```
+## # A tibble: 1 × 6
+##    mean    sd     n    se lower_ci upper_ci
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1  205.  14.5   168  1.12     202.     207.
+```
+
 
 ---
 
@@ -418,8 +494,8 @@ boot_1000
 ## 
 ## 
 ## Bootstrap Statistics :
-##     original     bias    std. error
-## t1*  204.506 0.01985119    1.156602
+##     original      bias    std. error
+## t1*  204.506 -0.07126786    1.137445
 ```
 
 ]
@@ -440,7 +516,7 @@ ggplot()+
 
 .right-plot[
 
-&lt;img src="intro_stats_files/figure-html/unnamed-chunk-11-1.png" width="120%" /&gt;
+&lt;img src="intro_stats_files/figure-html/unnamed-chunk-14-1.png" width="120%" /&gt;
 
 ]
 
@@ -464,8 +540,32 @@ boot.ci(boot_1000,
 ## 
 ## Intervals : 
 ## Level     Percentile     
-## 95%   (202.2, 206.8 )  
+## 95%   (202.3, 206.7 )  
 ## Calculations and Intervals on Original Scale
+```
+
+---
+
+## Confidence interval from t
+
+
+```r
+# Calculate the 95% confidence interval
+ci &lt;- qt(c(0.025, 0.975), df = length(flipper) - 1) * (sd(flipper)/sqrt(length(flipper)))
+
+# Display the 95% CI
+ci_lower &lt;- mean(flipper) + ci[1]
+ci_upper &lt;- mean(flipper) + ci[2]
+
+list(lower_bound = ci_lower, upper_bound = ci_upper)
+```
+
+```
+## $lower_bound
+## [1] 202.29
+## 
+## $upper_bound
+## [1] 206.7219
 ```
 
 ---
@@ -540,6 +640,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

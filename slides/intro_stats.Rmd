@@ -47,12 +47,6 @@ class: title-slide, left, top
 
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
 
----
-
-layout: true
-
-<div class="my-footer"><span>Philip Leftwich - 5023Y Courses Slido.com #3163611</span></div>
-
 
 
 ---
@@ -78,7 +72,11 @@ class: center, middle, inverse
 
 *Statistical models are similar to golems in that, beyond their given directives, they do not ascertain any knowledge or intent of their own.*
 
+--
+
 *They hold no wisdom or power to understand the context of where they are being applied, and whether their resulting output is appropriate for the given situation.* 
+
+--
 
 *They are just a set of instructions made to analyze data to challenge beliefs, inspire intuition, or validate hypotheses*
 
@@ -144,7 +142,7 @@ Phil has **1** friend
 
 The model assumes each lecturer has **2.6** friends
 
-The deviance is **-1.6** friend
+The deviance is **-1.6** friends
 
 Model **overestimates** number of friends for this lecturer 😔
 
@@ -179,13 +177,15 @@ class: center
 Small $s$ = taller, narrower
 Large $s$ = squatter, wider
 
+$f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}$
+
 ```{r, eval = FALSE}
 rnorm(n = 1000,mean = 0,sd = 1)
 rnorm(n = 1000,mean = 0,sd = 2)
 rnorm(n = 1000,mean = 0,sd = 3)
 ```
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE, out.width = "60%"}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, out.width = "50%"}
 
 library(patchwork)
 
@@ -206,8 +206,83 @@ pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "
 
 ```
 
+
+---
+class: center
+
+.pull-left[
+
+$f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}$
+
+Where:
+
+$f(x)$ = probability of x function
+
+$\mu$ = mean
+
+$\sigma$ = standard deviation
+
+$e$ = 2.71828...
+
+$pi$ 3.14159...
+
+]
+
+.pull-right[
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, out.width = "50%"}
+
+library(patchwork)
+
+`SD = 1` <- rnorm(n = 1000, mean = 0, sd = 1)
+`SD = 2` <- rnorm(n = 1000, mean = 0, sd = 2)
+`SD = 3` <- rnorm(n = 1000, mean = 0, sd = 3)
+
+tibble(`SD = 1`, `SD = 2`, `SD = 3`) %>% 
+pivot_longer(cols = everything(), names_to = "Standard Deviation", values_to = "values") %>% 
+  ggplot(aes(x = values, fill = `Standard Deviation`))+
+  geom_histogram()+
+  facet_wrap(~ `Standard Deviation`)+
+  theme_classic()+
+  theme(legend.position = "none")+
+  labs(x = " ",
+       y = "Frequency")
+
+
+```
+
+]
+
 ---
 
+## Normal Distribution
+
+--
+
+.pull-left[
+
+```{r, echo = FALSE, out.width="40%", fig.alt = " Normal distribution"}
+
+knitr::include_graphics("images/probability curve.png")
+```
+
+]
+
+.pull-right[
+
+
+$Z = \frac{X - \bar{X}}{\sigma}$
+
+Where:
+- $Z$ is the z score.
+- $X$ is the individual data point.
+- $\bar{X}$ is the mean of the data.
+- $\sigma$ is the standard deviation.
+
+]
+
+---
 
 ## Responsible statistics
 
@@ -264,9 +339,8 @@ class: center, middle, inverse
 
 Each time we take a sample, they will vary slightly
 
-.right-plot[
 
-```{r, echo = FALSE, warning = FALSE, out.width = "95%"}
+```{r, echo = FALSE, warning = FALSE, out.width = "105%"}
 
 library(DiagrammeR)
 
@@ -297,22 +371,20 @@ a -> g
 
 ```
 
-]
+---
 
-.left-code[
-
+## Standard Error
 
 - Going *back* to standard deviation, small standard deviations showed data points were close to the mean, large standard deviations the points were further away
 
-
+--
 
 - If you were able to calculate the deviation between *sample means* you would know how much variability there is between samples
 
-
+--
 
 - The standard deviation of sample means is called the **standard error**
 
-]
 
 ---
 
@@ -322,11 +394,12 @@ a -> g
 
 - We rely on approximation
 
-- When samples are sufficiently large ( > 30), the sampling distribution should have a mean equal to the population mean within a standard deviation of the equation below: 
+- When samples are sufficiently large ( > 30), the sampling distribution *should* have a mean equal to the population mean within a standard deviation of the equation below: 
 
 $$
 SE = {\sigma\over{\sqrt{n}}}
 $$
+
 This is the **central limit theorem**
 
 ---
@@ -428,6 +501,7 @@ Three choices:
 2. Use another type of sampling distribution (e.g. t-distribution)
 
 --
+
 3. Bootstrap our sampling distribution
 
 
@@ -439,6 +513,23 @@ Three choices:
 
 knitr::include_graphics("images/bootstrapping.png")
 ```
+
+---
+
+## Confidence interval from z
+
+```{r}
+  penguins %>% 
+  filter(sex == "male") %>% 
+  summarise(mean = mean(flipper_length_mm),
+            sd = sd(flipper_length_mm),
+            n = n(),
+            se = sd/sqrt(n),
+            lower_ci = (mean - (1.96*se)),
+            upper_ci = (mean + (1.96*se)))
+
+```
+
 
 ---
 
@@ -509,6 +600,22 @@ ggplot()+
 boot.ci(boot_1000,
         conf = 0.95,
         type = "perc")
+
+```
+
+---
+
+## Confidence interval from t
+
+```{r}
+# Calculate the 95% confidence interval
+ci <- qt(c(0.025, 0.975), df = length(flipper) - 1) * (sd(flipper)/sqrt(length(flipper)))
+
+# Display the 95% CI
+ci_lower <- mean(flipper) + ci[1]
+ci_upper <- mean(flipper) + ci[2]
+
+list(lower_bound = ci_lower, upper_bound = ci_upper)
 
 ```
 
