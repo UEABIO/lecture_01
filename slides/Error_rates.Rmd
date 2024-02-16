@@ -46,15 +46,7 @@ class: title-slide, left, top
 
 <span style='color:white;'>Slides released under</span> [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&nbsp;&nbsp;`r fontawesome::fa("creative-commons", "white")``r fontawesome::fa("creative-commons-by", "white")` ]
 
-<span style='color:white;'>Slido #4326367</span>
-
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
-
----
-
-layout: true
-
-<div class="my-footer"><span>Philip Leftwich - 5023Y Courses Slido.com #4326367</span></div>
 
 
 
@@ -364,16 +356,95 @@ There are four primary factors affecting power:
 
 * Effect size: The magnitude of a result present in a population
 
+* Variance: Amount of variability among subjects
+
 * Sample size: The number of observations per sample
 
 * Alpha: the threshold at which you would accept statistical significance (often 0.05)
 
-* Power: the probability of accepting the alternate hypothesis (if it is true)
+
 
 --
 
 Raising the value of any of effect size, sample size or $\alpha$ all increase Power $1-\beta$
 
+
+---
+
+## Calculating power
+
+
+.right-plot[
+.tiny[
+
+```{r, eval = F}
+
+set.seed(1234)
+
+myList <- vector("list", 1000)
+y <- tibble()
+
+for (i in 1:length(myList)) { 
+
+x <-  rnorm(n=12, mean=2.6, sd=2.83) # A True effect
+
+data <- tibble(x)
+temp <- lm(x~1, data=data) %>% 
+  broom::tidy(conf.int=T) 
+y <- rbind(y,temp)  
+
+}
+
+y$`experiment number` <- rep(1:1000)
+
+y %>% 
+  mutate(`p value < 0.05` = if_else(p.value > 0.049, "non-significant", "significant")) %>% 
+  group_by(`p value < 0.05`) %>% 
+  summarise(`number of experiments`=n()) %>% 
+  mutate(`power` = (`number of experiments` / length(y$`experiment number`)) * 100)
+
+```
+]
+]
+
+
+
+.left-code[
+.tiny[
+
+```{r, echo = F, eval  =T}
+
+set.seed(1234)
+
+myList <- vector("list", 1000)
+y <- tibble()
+
+for (i in 1:length(myList)) { 
+
+x <-  rnorm(n=12, mean=2.6, sd=2.83) # A True effect
+
+data <- tibble(x)
+temp <- lm(x~1, data=data) %>% 
+  broom::tidy(conf.int=T) 
+y <- rbind(y,temp)  
+
+}
+
+y$`experiment number` <- rep(1:1000)
+
+y %>% 
+  mutate(`p value < 0.05` = if_else(p.value > 0.049, "non-significant", "significant")) %>% 
+  group_by(`p value < 0.05`) %>% 
+  summarise(`number of experiments`=n()) %>% 
+  mutate(`power` = (`number of experiments` / length(y$`experiment number`)) * 100) %>% 
+  gt()
+
+```
+]
+
+- With a **true** effect of mean difference 2.6 and standard deviation of 2.83 we have 82% power with only 12 pairs of plants.
+
+]
 
 ---
 

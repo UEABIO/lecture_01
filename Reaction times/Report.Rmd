@@ -171,6 +171,7 @@ In the figure we have asked students to complete the Human Benchmark reaction ti
 
 ```{r figure two, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, out.width = "120%"}
 
+file.exists
 run_plot("Hand")
 
 ```

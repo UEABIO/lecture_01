@@ -47,11 +47,6 @@ class: title-slide, left, top
 
 <div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
 
----
-
-layout: true
-
-<div class="my-footer"><span>Philip Leftwich - 5023Y Courses Slido.com #2858224</span></div>
 
 
 ---
