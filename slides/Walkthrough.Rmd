@@ -1,0 +1,744 @@
+---
+title: "Walkthrough"
+subtitle: ""
+author: "Philip Leftwich"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/my-theme.css", "css/my-fonts.css"]
+    seal: false
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: dracula
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE,
+        eval = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, fig.retina = 3, fig.asp = 0.8, fig.width = 7, out.width = "50%")
+
+library(tidyverse)
+library(gt)
+library(gtExtras)
+library(palmerpenguins)
+library(wesanderson)
+library(rstatix)
+
+
+
+```
+
+
+class: title-slide, left, top
+
+# `r rmarkdown::metadata$title`
+
+## `r rmarkdown::metadata$subtitle`
+
+### `r rmarkdown::metadata$author`
+
+<br>
+
+
+
+<span style='color:white;'>Slides released under</span> [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&nbsp;&nbsp;`r fontawesome::fa("creative-commons", "white")``r fontawesome::fa("creative-commons-by", "white")` ]   
+
+
+<div style = "position: absolute;top: 0px;right: 0px;"><img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"></img></div>
+
+
+---
+
+## Butterfly and temperature effects
+
+- Analysis of museum specimens of a univoltine butterfly species
+
+- Does average temperature and rainfall effect body size?
+
+- Do males and females respond differently to environmental conditions?
+
+```{r, include = FALSE}
+
+source("../univoltine.R")
+
+```
+
+---
+
+##
+
+```{r}
+
+head(butterfly_clean)
+
+```
+
+
+---
+
+## Understanding data
+
+We have to really understand our data to be able to decide on the appropriate analyses to answer our research questions. It can also lead to unexpected & interesting research questions. That requires first **looking** at your data, usually in a number of ways, to ask questions like: 
+
+- Are there interesting patterns, groups, trends or relationships?
+
+- How are observations distributed?
+
+- Are there outliers?
+
+- Is there notable bias in observations or missing observations? 
+
+---
+
+class: center, middle
+
+### Always start a data analysis by thinking about it really hard before analyzing
+
+--
+
+## EVERY TIME
+
+---
+
+## Understand your data
+
+- Is each column in the appropriate data type? Factor, character, dbl, integer?
+
+- Are the columns and names easy to use/understand?
+
+- Basic data cleaning/ tidy data formatting
+
+---
+
+## Data import
+
+We should check all of our column names
+
+```{r}
+colnames(butterfly_df)
+
+```
+
+And if needed put them in a consistent naming style
+
+```{r}
+butterfly_df <- janitor::clean_names(butterfly_df)
+colnames(butterfly_df)
+```
+
+---
+
+## Basic information
+
+What do we need to know about our data?
+
+```{r, eval = F}
+nrow(butterfly_df)
+# number of rows of dataframe
+
+str(butterfly_df)
+
+summary(butterfly_df)
+```
+
+
+
+---
+
+class: center, middle, inverse
+
+## Univariate analysis
+
+
+---
+
+## Univariate analysis
+
+Continuous variables:
+
+Understand skew, outliers
+
+Factorial variables:
+
+Relative abundances, number of categories
+
+All: 
+
+Missing values
+
+---
+
+## Univariate analysis
+
+This variable has one clear data outlier - we will leave it for now - but understanding its presence is important
+
+```{r}
+hist(butterfly_df$rain_jun)
+# outlier detected
+
+butterfly_df %>%
+  ggplot(aes(x = rain_jun)) +
+  geom_histogram()
+
+```
+
+---
+
+```{r}
+hist(butterfly_df$forewing_length)
+# no outliers
+```
+
+---
+
+```{r}
+hist(butterfly_df$jun_mean)
+# no outliers
+```
+
+---
+
+## Checking for groups and typos
+
+Understanding the number of levels in our factors (and whether there are mistakes) is important
+
+```{r}
+unique(butterfly_df$sex)
+# typos detected
+```
+
+
+```{r}
+butterfly_clean <- butterfly_df %>%
+   mutate(sex = case_when(sex == "Female" ~ "Females",
+                             sex == "Maes" ~ "Males",
+                             .default = as.character(sex)))
+unique(butterfly_clean$sex)
+
+```
+
+---
+
+## How many males and females
+
+Are our groups equally weighted (or near enough)
+
+```{r}
+butterfly_clean %>%
+  group_by(sex) %>%
+  summarise(n = n())
+```
+
+
+---
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+```{r}
+butterfly_clean %>%                                    # Count NA by group
+  group_by(sex) %>%
+  dplyr::summarize(na_sex = sum(is.na(sex)),
+                   na_year = sum(is.na(year)),
+                   na_forewing_length = sum(is.na(forewing_length)))
+
+```
+
+---
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+```{r}
+butterfly_clean %>%
+  group_by(sex) %>% 
+  summarize(across(everything(), ~sum(is.na(.))))
+
+```
+
+
+---
+
+class: split-four
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+
+```{r, eval = FALSE}
+
+
+skimr::skim(butterfly_clean)
+
+```
+
+
+---
+
+## Exploratory Analysis
+
+```{r}
+GGally::ggpairs(butterfly_clean,
+                aes(colour = sex))
+
+```
+
+---
+
+## Scatter plots
+
+Show values of observations within a group, adding some amount of “jitter” so that they don’t all overlap 
+
+.left-code[
+```{r, eval = FALSE}
+ggplot(butterfly_clean, aes(x = jun_mean,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+.right-plot[
+```{r, echo = FALSE, out.width = "80%"}
+ggplot(butterfly_clean, aes(x = jun_mean,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+---
+
+## Scatter plots
+
+.left-code[
+```{r, eval = FALSE}
+ggplot(butterfly_clean, aes(x = rain_jun,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+.right-plot[
+```{r, echo = FALSE, out.width = "80%"}
+ggplot(butterfly_clean, aes(x = rain_jun,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+
+---
+
+## Corrplot
+
+.left-code[
+```{r, eval = FALSE}
+
+library(corrplot)
+
+butterfly_clean %>% 
+  select(where(is.numeric)) %>% 
+  cor() %>% 
+corrplot()
+
+```
+
+]
+
+.right-plot[
+
+```{r, echo = FALSE, out.width = "80%"}
+
+library(corrplot)
+
+butterfly_clean %>% 
+  select(where(is.numeric)) %>% 
+  cor() %>% 
+corrplot()
+
+```
+
+]
+
+---
+
+## Analysis
+
+```{r}
+model <- lm(forewing_length ~ jun_mean + sex + rain_jun + jun_mean:sex,
+            data = butterfly_clean)
+
+summary(model)
+```
+
+---
+
+## Check model fit
+
+```{r}
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+---
+
+```{r, out.width = "70%"}
+performance::check_model(model, detrend = F)
+```
+---
+
+## Issues
+
+.pull-left[
+
+
+- multicollinearity
+
+```{r}
+
+vif(model)
+
+```
+
+]
+
+.pull-right[
+
+- outlier effect
+
+```{r, out.width = "80%"}
+
+plot(model, which = c(4,4))
+
+```
+
+]
+
+---
+
+## Mean-centering
+
+This helps center the intercept at the average rain and temperature
+
+It can also reduce or eliminate multicollinearity
+
+```{r}
+
+butterfly_clean <- butterfly_clean %>% 
+  mutate(rain_jun_center = rain_jun - mean(rain_jun, na.rm = T),
+         jun_mean_center = jun_mean - mean(jun_mean, na.rm = T))
+
+```
+
+---
+
+## Outlier 
+
+Unsurprisingly the row of data with exceptionally high recorded rainfall is our outlier. 
+
+We will remove it from the data and refit the model. 
+
+Not shown here but it is a good idea to compare the models and see how much the outlier(s) actually change model interpretations
+
+```{r}
+
+butterfly_clean[19,]
+
+```
+
+---
+
+## Outlier
+
+```{r}
+
+par(mfrow = c(2, 2))
+
+model2 <- lm(forewing_length ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+            data = butterfly_clean[-19,])
+
+plot(model2)
+
+
+```
+
+
+---
+
+## Formal checks
+
+- Formal checks can help support residual plot checking
+
+- These test if deviations from assumptions are large enough to cause problems
+
+```{r, eval = F}
+# Breusch Pagan test for normality
+lmtest::bptest(model2)
+```
+
+
+```{r, eval = F}
+# qqplot with confidence intervals
+car::qqPlot(model2) # adds a confidence interval check
+```
+
+
+```{r, eval = F}
+
+# shapiro wilk test for homoscedasticity
+shapiro.test(residuals(model2))
+
+```
+
+
+
+---
+
+## Transformations
+
+Our model was fine - but can it be improved?
+
+```{r}
+car::boxCox(model2)
+# indicates a log transformation could be suitable?
+
+```
+
+---
+
+## Room for improvement?
+
+- The nearest straighforward transformation would be natural log:
+
+```{r}
+# Could also check if outlier is still an issue when dependent variable transformed?
+model3 <- lm(log(forewing_length) ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+             data = butterfly_clean[-19,])
+
+```
+
+
+---
+
+## Room for improvement?
+
+The exact maximum likelihood transformation can be taken from lambda: 
+
+```{r, echo = FALSE}
+b <- car::boxCox(model2)
+lambda <- b$x[which.max(b$y)]
+lambda
+```
+
+
+```{r}
+
+model4 <- lm(((forewing_length^lambda-1)/lambda) ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+             data = butterfly_clean[-19,])
+
+
+```
+
+---
+
+## Compare models
+
+Although data transformations marginally improve the fit of the model, it probably isn't worth the added complexity. 
+
+```{r}
+
+summary(model2)$adj.r.squared
+summary(model3)$adj.r.squared
+summary(model4)$adj.r.squared
+
+```
+
+---
+
+- With my chosen model, I can noe reliably test for statistical significance and effects
+
+.pull-left[
+
+```{r, out.width = "30%"}
+# Test interactions
+
+model2a <- lm(forewing_length ~ jun_mean_center + sex + rain_jun_center,
+              data = butterfly_clean[-19,])
+
+summary(model2a)
+
+```
+
+]
+
+.pull-right[
+
+*I tested for an interaction between sex and changing average temperature, but found no significant effect t<sub>52</sub> = 1.437, p = 0.16*
+
+]
+
+---
+
+-  I tested for an interaction between sex and changing average temperature, but found no significant effect F<sub>1,53</sub> = 2.06,  p = 0.16
+
+```{r}
+drop1(model2, test = "F")
+anova(model2a, model2)
+
+```
+
+---
+
+## Insights
+
+What interesting biological insights can I extract?
+
+```{r}
+
+confint(model2a)
+broom::tidy(model2a, conf.int = T)
+
+```
+
+---
+
+## Insights
+
+> Under average conditions females had a mean forewing length (mm) of 11.2mm [95% CI, 9.5 - 12.9], while males were an average of 1.3mm[1.07 - 1.55] smaller.
+
+> Every one degree celsius change in mean June temperature produced a 0.2mm [0.09 - 0.33] increase in body size.
+
+
+Consider these effect sizes (and uncertainties) on the scale and range of the observed data. 
+
+---
+
+## Visualisation
+
+- It's important to use the predictions built from *your* model. 
+
+- `geom_smooth` produces *separate* regression fits for each line on the graph
+
+- This is not going to be the same as your complex models
+
+---
+
+## Visualisation
+
+.left-code[
+
+```{r}
+model_sum <- emmeans::emmeans(model_2a, specs = ~jun_mean + sex,
+                 at =list(jun_mean = c(11.8: 16.4))) %>%
+  as_tibble()
+
+butterfly_clean %>%
+  ggplot(aes(x = jun_mean,
+             y = forewing_length,
+             fill = sex))+
+  geom_ribbon(data = model_sum,
+              aes(x = jun_mean,
+                  y = emmean,
+                  ymin = lower.CL,
+                  ymax = upper.CL,
+                  fill = sex),
+              alpha = .2)+
+  geom_line(data = model_sum,
+            aes(x = jun_mean,
+                y = emmean,
+                colour = sex),
+            show.legend = FALSE)+
+  geom_point(shape = 21,
+             colour = "black",
+             show.legend = FALSE)+
+  scale_colour_manual(values = c("darkorange", "purple"))+
+  scale_fill_manual(values = c("darkorange", "purple"))+
+  labs(x = "Mean June Temperature (°C)",
+       y = "Forewing length (mm)",
+       fill = "Sex")+
+  theme_classic()+
+  theme(legend.position = "top")
+```
+
+]
+
+.right-plot[
+
+```{r, echo = FALSE, eval = TRUE, out.width = "80%"}
+
+model_sum <- emmeans::emmeans(model_2a, specs = ~jun_mean + sex,
+                 at =list(jun_mean = c(11.8: 16.4))) %>%
+  as_tibble()
+
+butterfly_clean %>%
+  ggplot(aes(x = jun_mean,
+             y = forewing_length,
+             fill = sex))+
+  geom_ribbon(data = model_sum,
+              aes(x = jun_mean,
+                  y = emmean,
+                  ymin = lower.CL,
+                  ymax = upper.CL,
+                  fill = sex),
+              alpha = .2)+
+  geom_line(data = model_sum,
+            aes(x = jun_mean,
+                y = emmean,
+                colour = sex),
+            show.legend = FALSE)+
+  geom_point(shape = 21,
+             colour = "black",
+             show.legend = FALSE)+
+  scale_colour_manual(values = c("darkorange", "purple"))+
+  scale_fill_manual(values = c("darkorange", "purple"))+
+  labs(x = "Mean June Temperature (°C)",
+       y = "Forewing length (mm)",
+       fill = "Sex")+
+  theme_classic()+
+  theme(legend.position = "top")
+```
+
+
+
+]
+
+---
+
+## What have I proved?
+
+- There is evidence to support a positive effect of temperature on body size
+
+- Female butterflies are larger than males
+
+---
+
+## What have I failed to show?
+
+- Sex-specific effects of temperature on size - this may mean there is no such effect, or that we made a Type 2 error due to random sampling or sample size
+
+- No effect of average rainfall on size - for the same reasons
+
+

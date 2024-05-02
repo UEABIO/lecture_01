@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Walkthrough</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Philip Leftwich" />
+    <meta name="date" content="2024-05-02" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="css/my-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+class: title-slide, left, top
+
+# Walkthrough
+
+## 
+
+### Philip Leftwich
+
+&lt;br&gt;
+
+
+
+&lt;span style='color:white;'&gt;Slides released under&lt;/span&gt; [CC-BY 2.0](https://creativecommons.org/licenses/by/2.0/)&amp;nbsp;&amp;nbsp;<svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M245.83 214.87l-33.22 17.28c-9.43-19.58-25.24-19.93-27.46-19.93-22.13 0-33.22 14.61-33.22 43.84 0 23.57 9.21 43.84 33.22 43.84 14.47 0 24.65-7.09 30.57-21.26l30.55 15.5c-6.17 11.51-25.69 38.98-65.1 38.98-22.6 0-73.96-10.32-73.96-77.05 0-58.69 43-77.06 72.63-77.06 30.72-.01 52.7 11.95 65.99 35.86zm143.05 0l-32.78 17.28c-9.5-19.77-25.72-19.93-27.9-19.93-22.14 0-33.22 14.61-33.22 43.84 0 23.55 9.23 43.84 33.22 43.84 14.45 0 24.65-7.09 30.54-21.26l31 15.5c-2.1 3.75-21.39 38.98-65.09 38.98-22.69 0-73.96-9.87-73.96-77.05 0-58.67 42.97-77.06 72.63-77.06 30.71-.01 52.58 11.95 65.56 35.86zM247.56 8.05C104.74 8.05 0 123.11 0 256.05c0 138.49 113.6 248 247.56 248 129.93 0 248.44-100.87 248.44-248 0-137.87-106.62-248-248.44-248zm.87 450.81c-112.54 0-203.7-93.04-203.7-202.81 0-105.42 85.43-203.27 203.72-203.27 112.53 0 202.82 89.46 202.82 203.26-.01 121.69-99.68 202.82-202.84 202.82z"/></svg><svg aria-hidden="true" role="img" viewBox="0 0 496 512" style="height:1em;width:0.97em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:white;overflow:visible;position:relative;"><path d="M314.9 194.4v101.4h-28.3v120.5h-77.1V295.9h-28.3V194.4c0-4.4 1.6-8.2 4.6-11.3 3.1-3.1 6.9-4.7 11.3-4.7H299c4.1 0 7.8 1.6 11.1 4.7 3.1 3.2 4.8 6.9 4.8 11.3zm-101.5-63.7c0-23.3 11.5-35 34.5-35s34.5 11.7 34.5 35c0 23-11.5 34.5-34.5 34.5s-34.5-11.5-34.5-34.5zM247.6 8C389.4 8 496 118.1 496 256c0 147.1-118.5 248-248.4 248C113.6 504 0 394.5 0 256 0 123.1 104.7 8 247.6 8zm.8 44.7C130.2 52.7 44.7 150.6 44.7 256c0 109.8 91.2 202.8 203.7 202.8 103.2 0 202.8-81.1 202.8-202.8.1-113.8-90.2-203.3-202.8-203.3z"/></svg> ]   
+
+
+&lt;div style = "position: absolute;top: 0px;right: 0px;"&gt;&lt;img src="images/logo.png" alt="The hex logo for plumbertableau package" width="500"&gt;&lt;/img&gt;&lt;/div&gt;
+
+
+---
+
+## Butterfly and temperature effects
+
+- Analysis of museum specimens of a univoltine butterfly species
+
+- Does average temperature and rainfall effect body size?
+
+- Do males and females respond differently to environmental conditions?
+
+
+
+---
+
+##
+
+
+```r
+head(butterfly_clean)
+```
+
+```
+## # A tibble: 6 × 5
+##    year forewing_length sex     jun_mean rain_jun
+##   &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1  1880            14.6 Females     13.8     87.9
+## 2  1892            14.4 Females     13.4     83.1
+## 3  1892            13.1 Males       13.4     83.1
+## 4  1896            14.7 Females     16.2     54.7
+## 5  1898            14.7 Females     13.6     44.9
+## 6  1899            13.8 Males       15.7     37.7
+```
+
+
+---
+
+## Understanding data
+
+We have to really understand our data to be able to decide on the appropriate analyses to answer our research questions. It can also lead to unexpected &amp; interesting research questions. That requires first **looking** at your data, usually in a number of ways, to ask questions like: 
+
+- Are there interesting patterns, groups, trends or relationships?
+
+- How are observations distributed?
+
+- Are there outliers?
+
+- Is there notable bias in observations or missing observations? 
+
+---
+
+class: center, middle
+
+### Always start a data analysis by thinking about it really hard before analyzing
+
+--
+
+## EVERY TIME
+
+---
+
+## Understand your data
+
+- Is each column in the appropriate data type? Factor, character, dbl, integer?
+
+- Are the columns and names easy to use/understand?
+
+- Basic data cleaning/ tidy data formatting
+
+---
+
+## Data import
+
+We should check all of our column names
+
+
+```r
+colnames(butterfly_df)
+```
+
+```
+## [1] "year"            "forewing_length" "sex"             "jun_mean"       
+## [5] "rain_jun"
+```
+
+And if needed put them in a consistent naming style
+
+
+```r
+butterfly_df &lt;- janitor::clean_names(butterfly_df)
+colnames(butterfly_df)
+```
+
+```
+## [1] "year"            "forewing_length" "sex"             "jun_mean"       
+## [5] "rain_jun"
+```
+
+---
+
+## Basic information
+
+What do we need to know about our data?
+
+
+```r
+nrow(butterfly_df)
+# number of rows of dataframe
+
+str(butterfly_df)
+
+summary(butterfly_df)
+```
+
+
+
+---
+
+class: center, middle, inverse
+
+## Univariate analysis
+
+
+---
+
+## Univariate analysis
+
+Continuous variables:
+
+Understand skew, outliers
+
+Factorial variables:
+
+Relative abundances, number of categories
+
+All: 
+
+Missing values
+
+---
+
+## Univariate analysis
+
+This variable has one clear data outlier - we will leave it for now - but understanding its presence is important
+
+
+```r
+hist(butterfly_df$rain_jun)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-6-1.png" width="50%" /&gt;
+
+```r
+# outlier detected
+
+butterfly_df %&gt;%
+  ggplot(aes(x = rain_jun)) +
+  geom_histogram()
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-6-2.png" width="50%" /&gt;
+
+---
+
+
+```r
+hist(butterfly_df$forewing_length)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-7-1.png" width="50%" /&gt;
+
+```r
+# no outliers
+```
+
+---
+
+
+```r
+hist(butterfly_df$jun_mean)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-8-1.png" width="50%" /&gt;
+
+```r
+# no outliers
+```
+
+---
+
+## Checking for groups and typos
+
+Understanding the number of levels in our factors (and whether there are mistakes) is important
+
+
+```r
+unique(butterfly_df$sex)
+```
+
+```
+## [1] "Females" "Males"   "Female"  "Maes"
+```
+
+```r
+# typos detected
+```
+
+
+
+```r
+butterfly_clean &lt;- butterfly_df %&gt;%
+   mutate(sex = case_when(sex == "Female" ~ "Females",
+                             sex == "Maes" ~ "Males",
+                             .default = as.character(sex)))
+unique(butterfly_clean$sex)
+```
+
+```
+## [1] "Females" "Males"
+```
+
+---
+
+## How many males and females
+
+Are our groups equally weighted (or near enough)
+
+
+```r
+butterfly_clean %&gt;%
+  group_by(sex) %&gt;%
+  summarise(n = n())
+```
+
+```
+## # A tibble: 2 × 2
+##   sex         n
+##   &lt;chr&gt;   &lt;int&gt;
+## 1 Females    30
+## 2 Males      28
+```
+
+
+---
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+
+```r
+butterfly_clean %&gt;%                                    # Count NA by group
+  group_by(sex) %&gt;%
+  dplyr::summarize(na_sex = sum(is.na(sex)),
+                   na_year = sum(is.na(year)),
+                   na_forewing_length = sum(is.na(forewing_length)))
+```
+
+```
+## # A tibble: 2 × 4
+##   sex     na_sex na_year na_forewing_length
+##   &lt;chr&gt;    &lt;int&gt;   &lt;int&gt;              &lt;int&gt;
+## 1 Females      0       0                  0
+## 2 Males        0       0                  0
+```
+
+---
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+
+```r
+butterfly_clean %&gt;%
+  group_by(sex) %&gt;% 
+  summarize(across(everything(), ~sum(is.na(.))))
+```
+
+```
+## # A tibble: 2 × 5
+##   sex      year forewing_length jun_mean rain_jun
+##   &lt;chr&gt;   &lt;int&gt;           &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1 Females     0               0        0        0
+## 2 Males       0               0        0        0
+```
+
+
+---
+
+class: split-four
+
+### Understand data
+
+Understand missingness 
+
+The amount and distribution of missing values could indicate bias in our data collection
+
+
+
+```r
+skimr::skim(butterfly_clean)
+```
+
+
+---
+
+## Exploratory Analysis
+
+
+```r
+GGally::ggpairs(butterfly_clean,
+                aes(colour = sex))
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-15-1.png" width="50%" /&gt;
+
+---
+
+## Scatter plots
+
+Show values of observations within a group, adding some amount of “jitter” so that they don’t all overlap 
+
+.left-code[
+
+```r
+ggplot(butterfly_clean, aes(x = jun_mean,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+.right-plot[
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-17-1.png" width="80%" /&gt;
+]
+
+---
+
+## Scatter plots
+
+.left-code[
+
+```r
+ggplot(butterfly_clean, aes(x = rain_jun,
+                     y = forewing_length))+
+  geom_point(alpha = 0.4,
+              aes(colour = sex))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_light()
+```
+]
+
+.right-plot[
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-19-1.png" width="80%" /&gt;
+]
+
+
+---
+
+## Corrplot
+
+.left-code[
+
+```r
+library(corrplot)
+
+butterfly_clean %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  cor() %&gt;% 
+corrplot()
+```
+
+]
+
+.right-plot[
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-21-1.png" width="80%" /&gt;
+
+]
+
+---
+
+## Analysis
+
+
+```r
+model &lt;- lm(forewing_length ~ jun_mean + sex + rain_jun + jun_mean:sex,
+            data = butterfly_clean)
+
+summary(model)
+```
+
+```
+## 
+## Call:
+## lm(formula = forewing_length ~ jun_mean + sex + rain_jun + jun_mean:sex, 
+##     data = butterfly_clean)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.0507 -0.2774  0.0211  0.3060  0.7946 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       12.4959188  1.1088256  11.270 1.09e-15 ***
+## jun_mean           0.1277056  0.0781941   1.633   0.1084    
+## sexMales          -3.4561209  1.5555854  -2.222   0.0306 *  
+## rain_jun           0.0001116  0.0008202   0.136   0.8923    
+## jun_mean:sexMales  0.1517809  0.1101940   1.377   0.1742    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.4444 on 53 degrees of freedom
+## Multiple R-squared:  0.7334,	Adjusted R-squared:  0.7133 
+## F-statistic: 36.45 on 4 and 53 DF,  p-value: 1.245e-14
+```
+
+---
+
+## Check model fit
+
+
+```r
+par(mfrow = c(2, 2))
+plot(model)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-23-1.png" width="50%" /&gt;
+
+---
+
+
+```r
+performance::check_model(model, detrend = F)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-24-1.png" width="70%" /&gt;
+---
+
+## Issues
+
+.pull-left[
+
+
+- multicollinearity
+
+
+```r
+vif(model)
+```
+
+```
+##     jun_mean          sex     rain_jun jun_mean:sex 
+##     2.018355   177.465192     1.015896   177.627300
+```
+
+]
+
+.pull-right[
+
+- outlier effect
+
+
+```r
+plot(model, which = c(4,4))
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-26-1.png" width="80%" /&gt;
+
+]
+
+---
+
+## Mean-centering
+
+This helps center the intercept at the average rain and temperature
+
+It can also reduce or eliminate multicollinearity
+
+
+```r
+butterfly_clean &lt;- butterfly_clean %&gt;% 
+  mutate(rain_jun_center = rain_jun - mean(rain_jun, na.rm = T),
+         jun_mean_center = jun_mean - mean(jun_mean, na.rm = T))
+```
+
+---
+
+## Outlier 
+
+Unsurprisingly the row of data with exceptionally high recorded rainfall is our outlier. 
+
+We will remove it from the data and refit the model. 
+
+Not shown here but it is a good idea to compare the models and see how much the outlier(s) actually change model interpretations
+
+
+```r
+butterfly_clean[19,]
+```
+
+```
+## # A tibble: 1 × 7
+##    year forewing_length sex   jun_mean rain_jun rain_jun_center jun_mean_center
+##   &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+## 1  1914            13.1 Males     14.5      577            516.           0.419
+```
+
+---
+
+## Outlier
+
+
+```r
+par(mfrow = c(2, 2))
+
+model2 &lt;- lm(forewing_length ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+            data = butterfly_clean[-19,])
+
+plot(model2)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-29-1.png" width="50%" /&gt;
+
+
+---
+
+## Formal checks
+
+- Formal checks can help support residual plot checking
+
+- These test if deviations from assumptions are large enough to cause problems
+
+
+```r
+# Breusch Pagan test for normality
+lmtest::bptest(model2)
+```
+
+
+
+```r
+# qqplot with confidence intervals
+car::qqPlot(model2) # adds a confidence interval check
+```
+
+
+
+```r
+# shapiro wilk test for homoscedasticity
+shapiro.test(residuals(model2))
+```
+
+
+
+---
+
+## Transformations
+
+Our model was fine - but can it be improved?
+
+
+```r
+car::boxCox(model2)
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-33-1.png" width="50%" /&gt;
+
+```r
+# indicates a log transformation could be suitable?
+```
+
+---
+
+## Room for improvement?
+
+- The nearest straighforward transformation would be natural log:
+
+
+```r
+# Could also check if outlier is still an issue when dependent variable transformed?
+model3 &lt;- lm(log(forewing_length) ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+             data = butterfly_clean[-19,])
+```
+
+
+---
+
+## Room for improvement?
+
+The exact maximum likelihood transformation can be taken from lambda: 
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-35-1.png" width="50%" /&gt;
+
+```
+## [1] -0.4646465
+```
+
+
+
+```r
+model4 &lt;- lm(((forewing_length^lambda-1)/lambda) ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex,
+             data = butterfly_clean[-19,])
+```
+
+---
+
+## Compare models
+
+Although data transformations marginally improve the fit of the model, it probably isn't worth the added complexity. 
+
+
+```r
+summary(model2)$adj.r.squared
+```
+
+```
+## [1] 0.7130783
+```
+
+```r
+summary(model3)$adj.r.squared
+```
+
+```
+## [1] 0.7180266
+```
+
+```r
+summary(model4)$adj.r.squared
+```
+
+```
+## [1] 0.7199435
+```
+
+---
+
+- With my chosen model, I can noe reliably test for statistical significance and effects
+
+.pull-left[
+
+
+```r
+# Test interactions
+
+model2a &lt;- lm(forewing_length ~ jun_mean_center + sex + rain_jun_center,
+              data = butterfly_clean[-19,])
+
+summary(model2a)
+```
+
+```
+## 
+## Call:
+## lm(formula = forewing_length ~ jun_mean_center + sex + rain_jun_center, 
+##     data = butterfly_clean[-19, ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.05661 -0.29524 -0.04409  0.30089  0.76494 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     14.311082   0.085493 167.395  &lt; 2e-16 ***
+## jun_mean_center  0.211321   0.057258   3.691 0.000529 ***
+## sexMales        -1.314105   0.119811 -10.968 3.01e-15 ***
+## rain_jun_center  0.001667   0.002784   0.599 0.551799    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.4509 on 53 degrees of freedom
+## Multiple R-squared:  0.723,	Adjusted R-squared:  0.7073 
+## F-statistic: 46.11 on 3 and 53 DF,  p-value: 8.482e-15
+```
+
+]
+
+.pull-right[
+
+*I tested for an interaction between sex and changing average temperature, but found no significant effect t&lt;sub&gt;52&lt;/sub&gt; = 1.437, p = 0.16*
+
+]
+
+---
+
+-  I tested for an interaction between sex and changing average temperature, but found no significant effect F&lt;sub&gt;1,53&lt;/sub&gt; = 2.06,  p = 0.16
+
+
+```r
+drop1(model2, test = "F")
+```
+
+```
+## Single term deletions
+## 
+## Model:
+## forewing_length ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex
+##                     Df Sum of Sq    RSS     AIC F value Pr(&gt;F)
+## &lt;none&gt;                           10.363 -87.174               
+## rain_jun_center      1   0.10569 10.469 -88.596  0.5303 0.4697
+## jun_mean_center:sex  1   0.41131 10.774 -86.955  2.0639 0.1568
+```
+
+```r
+anova(model2a, model2)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: forewing_length ~ jun_mean_center + sex + rain_jun_center
+## Model 2: forewing_length ~ jun_mean_center + sex + rain_jun_center + jun_mean_center:sex
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     53 10.774                           
+## 2     52 10.363  1   0.41131 2.0639 0.1568
+```
+
+---
+
+## Insights
+
+What interesting biological insights can I extract?
+
+
+```r
+confint(model2a)
+```
+
+```
+##                        2.5 %       97.5 %
+## (Intercept)     14.139605199 14.482559058
+## jun_mean_center  0.096476170  0.326165209
+## sexMales        -1.554415299 -1.073793843
+## rain_jun_center -0.003916768  0.007251438
+```
+
+```r
+broom::tidy(model2a, conf.int = T)
+```
+
+```
+## # A tibble: 4 × 7
+##   term            estimate std.error statistic  p.value conf.low conf.high
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     14.3       0.0855    167.    7.10e-74 14.1      14.5    
+## 2 jun_mean_center  0.211     0.0573      3.69  5.29e- 4  0.0965    0.326  
+## 3 sexMales        -1.31      0.120     -11.0   3.01e-15 -1.55     -1.07   
+## 4 rain_jun_center  0.00167   0.00278     0.599 5.52e- 1 -0.00392   0.00725
+```
+
+---
+
+## Insights
+
+&gt; Under average conditions females had a mean forewing length (mm) of 11.2mm [95% CI, 9.5 - 12.9], while males were an average of 1.3mm[1.07 - 1.55] smaller.
+
+&gt; Every one degree celsius change in mean June temperature produced a 0.2mm [0.09 - 0.33] increase in body size.
+
+
+Consider these effect sizes (and uncertainties) on the scale and range of the observed data. 
+
+---
+
+## Visualisation
+
+- It's important to use the predictions built from *your* model. 
+
+- `geom_smooth` produces *separate* regression fits for each line on the graph
+
+- This is not going to be the same as your complex models
+
+---
+
+## Visualisation
+
+.left-code[
+
+
+```r
+model_sum &lt;- emmeans::emmeans(model_2a, specs = ~jun_mean + sex,
+                 at =list(jun_mean = c(11.8: 16.4))) %&gt;%
+  as_tibble()
+
+butterfly_clean %&gt;%
+  ggplot(aes(x = jun_mean,
+             y = forewing_length,
+             fill = sex))+
+  geom_ribbon(data = model_sum,
+              aes(x = jun_mean,
+                  y = emmean,
+                  ymin = lower.CL,
+                  ymax = upper.CL,
+                  fill = sex),
+              alpha = .2)+
+  geom_line(data = model_sum,
+            aes(x = jun_mean,
+                y = emmean,
+                colour = sex),
+            show.legend = FALSE)+
+  geom_point(shape = 21,
+             colour = "black",
+             show.legend = FALSE)+
+  scale_colour_manual(values = c("darkorange", "purple"))+
+  scale_fill_manual(values = c("darkorange", "purple"))+
+  labs(x = "Mean June Temperature (°C)",
+       y = "Forewing length (mm)",
+       fill = "Sex")+
+  theme_classic()+
+  theme(legend.position = "top")
+```
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-41-1.png" width="50%" /&gt;
+
+]
+
+.right-plot[
+
+&lt;img src="Walkthrough_files/figure-html/unnamed-chunk-42-1.png" width="80%" /&gt;
+
+
+
+]
+
+---
+
+## What have I proved?
+
+- There is evidence to support a positive effect of temperature on body size
+
+- Female butterflies are larger than males
+
+---
+
+## What have I failed to show?
+
+- Sex-specific effects of temperature on size - this may mean there is no such effect, or that we made a Type 2 error due to random sampling or sample size
+
+- No effect of average rainfall on size - for the same reasons
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "dracula",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

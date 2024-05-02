@@ -32,13 +32,14 @@ In the figure we have asked students to complete the Human Benchmark reaction ti
 
 - Any other observations?
 
-```{r figure, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, out.width = "120%"}
+```{r figure, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, out.width = "120%"}
 
 
-add_sample <- function(x){
-  return(c(y = max(x) + .025,
-           label = length(x)))
-}
+#add_sample <- function(x){
+#  return(c(y = max(x) + .025,
+#           label = length(x)))
+#}
+
 
 
 run_plot <- function(x = "Activity"){
@@ -46,7 +47,8 @@ run_plot <- function(x = "Activity"){
   if (x == "Activity") {
     table <- table %>%
       rename("Activity" = `Would you describe yourself as? Sedentary: 30 minutes of physical activity a day. Moderately active: You average 30 to 60 minutes of physical activity a day. Very active: You average more than 60 minutes of physical activity`) %>%
-      mutate(Activity = factor(Activity, levels = c("Sedentary", "Moderately Active", "Very active")))
+      mutate(Activity = factor(Activity, levels = c("Sedentary", "Moderately Active", "Very active"))) %>% 
+      mutate(id = as.character(.[[2]]))
     
     
     sub <- 'Reaction times for <span style ="color:#FF8C00">Sedentary</span>, <span style = "color:#A034F0">Moderately Active</span> and <span style = "color:#159090">Very active</span> students'
@@ -56,7 +58,8 @@ run_plot <- function(x = "Activity"){
   } else if (x == "Hand") {
     table <- table %>%
       rename("Hand" = `Are you right-handed, left-handed or ambidextrous`) %>%
-      mutate(Hand = factor(Hand, levels = c("right-handed", "left-handed", "ambidextrous")))
+      mutate(Hand = factor(Hand, levels = c("right-handed", "left-handed", "ambidextrous"))) %>% 
+      mutate(id = as.character(.[[2]]))
     
     pal <- c("#E69F00", "#0072B2", "#009E73")
     
@@ -65,13 +68,28 @@ run_plot <- function(x = "Activity"){
      }
 
 
-table %>%
+
+# Merge this summary back into the original dataframe
+#table <- table %>%
+#  left_join(df_unique_counts, by = .data[[x]])
+  
+  
+table <- table %>%
   group_by(.data[[x]]) %>%
   pivot_longer(
     cols = starts_with("Using your"),
     names_to = "Attempt",
     values_to = "Score",
-  ) %>%
+  ) 
+
+df_unique_counts <- table %>%
+  group_by(.data[[x]]) %>%
+  summarise(unique_count = n_distinct(.data[["id"]]),
+            y = max(`Score`, na.rm = T) + .025) %>%
+  
+  ungroup()
+
+table %>%
   filter(!is.na(.data[[x]])) %>%
   ggplot(aes(x = fct_rev(.data[[x]]), y = `Score`)) +
   ggdist::stat_halfeye(
@@ -118,17 +136,21 @@ table %>%
     size = 4.5,
     vjust = -3.5
   ) +
-  stat_summary(
-    geom = "text",
-    fun.data = add_sample,
-    aes(label = paste("n =", ..label..),
-        color = .data[[x]],
-        color = after_scale(darken(color, .1, space = "HLS"))),
-    family = "Roboto Condensed",
-    size = 4,
-    hjust = 0.5,
-    vjust = 3
-  ) +
+ # stat_summary(
+#    geom = "text",
+#    fun.data = add_sample,
+#    aes(label = paste("n =", ..label..),
+#        color = .data[[x]],
+#        color = after_scale(darken(color, .1, space = "HLS"))),
+ #   family = "Roboto Condensed",
+ #   size = 4,
+#    hjust = 0.5,
+ #   vjust = 3
+ # ) +
+geom_text(data = df_unique_counts,
+            aes(x = .data[[x]], y = `y`, label = paste("n =", unique_count)),
+            hjust = 0.5, vjust = 3, size = 4, family = "Roboto Condensed")+
+
   coord_flip(xlim = c(1.2, NA), clip = "off") +
 
   scale_color_manual(values = pal, guide = "none") +
@@ -169,7 +191,7 @@ run_plot()
 In the figure we have asked students to complete the Human Benchmark reaction times test three times - and self-report this alongside which hand they consider dominant: 
 
 
-```{r figure two, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, out.width = "120%"}
+```{r figure two, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, out.width = "120%"}
 
 file.exists
 run_plot("Hand")
